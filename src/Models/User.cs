@@ -12,8 +12,12 @@ namespace Models
         [MaxLength(128)]
         public string Name { get; set; }
 
+        [Range(0, 1)]
         public float SkillIndex { get; set; }
+
+        [Range(0, 100)]
         public int RemoteIndex { get; set; }
+
         public DateTime ConnectedAt { get; set; }
 
         [ForeignKey("Group")]

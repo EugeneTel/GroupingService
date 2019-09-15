@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -11,8 +8,7 @@ namespace Api.Controllers
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        // addUser?name=Mike&skill=0.5&remoteness=50
-
+        // GET addUser?name=[name]&skill=[double]&remoteness=[int]
         [HttpGet("addUser")]
         public ActionResult<string> AddUser(
             [FromServices] UserService userService,
@@ -22,13 +18,13 @@ namespace Api.Controllers
             [FromQuery] int remoteness
         )
         {
-            var newUser = userService.CreateUser(name);
+            var user = userService.CreateUser(name, skill, remoteness);
 
-            var groupForUser = groupService.GetGroupForUser(newUser);
+            var group = groupService.GetGroupForUser(user);
+                       
+            userService.ConnectUserToGroup(user, group);
 
-            userService.ConnectUserToGroup(newUser, groupForUser);
-
-            return Ok("User was added " + newUser.Name);
+            return Ok("User added to Group #" + group.Id);
         }
 
 
