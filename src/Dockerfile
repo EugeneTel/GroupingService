@@ -1,9 +1,9 @@
 FROM microsoft/dotnet:2.2-sdk-alpine as builder  
  
-RUN mkdir -p /root/src/app/dotnet-core-boilerplate
-WORKDIR /root/src/app/dotnet-core-boilerplate
+RUN mkdir -p /root/src/app/grouping-service
+WORKDIR /root/src/app/grouping-service
  
-COPY Boilerplate.sln . 
+COPY GroupingService.sln . 
 COPY Api/Api.csproj ./Api/Api.csproj
 COPY Models/Models.csproj ./Models/Models.csproj
 COPY Repository/Repository.csproj ./Repository/Repository.csproj
@@ -19,7 +19,7 @@ RUN dotnet publish -c Release -o published Api/Api.csproj
 FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine as dotnet-alpine
 
 WORKDIR /root/  
-COPY --from=builder /root/src/app/dotnet-core-boilerplate/Api/published .
+COPY --from=builder /root/src/app/grouping-service/Api/published .
 ENV ASPNETCORE_URLS=http://+:5000
 EXPOSE 5000/tcp
 CMD ["dotnet", "./Api.dll"]  
