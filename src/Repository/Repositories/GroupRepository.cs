@@ -58,9 +58,9 @@ namespace Repository.Repositories
         /// </summary>
         /// <param name="skillIndex">Skill Index</param>
         /// <param name="remoteIndex">Remoteness</param>
-        /// <param name="range"></param>
+        /// <param name="range">Range for search</param>
         /// <returns>Group model</returns>
-        public Group GetGroupInRange(double skillIndex, int remoteIndex, double range = 0.2f)
+        public Group GetGroupInRange(double skillIndex, int remoteIndex, double range = 0.2)
         {
             return _dbSet.Where(g => 
                 g.BaseSkillIndex >= skillIndex - range
@@ -77,10 +77,8 @@ namespace Repository.Repositories
         /// <param name="skillIndex">Base Skill index</param>
         /// <param name="remoteIndex">Base remoteness</param>
         /// <returns>Group model</returns>
-        public Group Create(double skillIndex, int remoteIndex)
+        public Group Create(double skillIndex, int remoteIndex, int maxUsers = 5)
         {
-            var maxUsers = 5;
-
             var group = new Group
             {
                 BaseRemoteIndex = remoteIndex,

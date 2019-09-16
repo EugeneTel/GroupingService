@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Models;
 using Repository.UnitOfWork;
+using Microsoft.Extensions.Configuration;
 
 namespace Services
 {
@@ -9,9 +10,12 @@ namespace Services
     {
         private IUnitOfWork _unitOfWork;
 
-        public GroupService(IUnitOfWork unitOfWork)
+        private IConfiguration _config;
+
+        public GroupService(IUnitOfWork unitOfWork, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
+            _config = config.GetSection("Groups");
         }
 
         /// <summary>
@@ -40,11 +44,13 @@ namespace Services
         /// <returns>Group</returns>
         public Group GetGroupForUser(User user)
         {
-            var group = _unitOfWork.Groups.GetGroupInRange(user.SkillIndex, user.RemoteIndex);
+            double searchRange = Convert.ToDouble(_config.GetSection("SearchRange").Value);
+            var group = _unitOfWork.Groups.GetGroupInRange(user.SkillIndex, user.RemoteIndex, searchRange);
 
             if (group == null)
             {
-                group = _unitOfWork.Groups.Create(user.SkillIndex, user.RemoteIndex);
+                int maxUsers = Int32.Parse(_config.GetSection("MaxUsers").Value);
+                group = _unitOfWork.Groups.Create(user.SkillIndex, user.RemoteIndex, maxUsers);
             }
 
             return group;
@@ -69,10 +75,6 @@ namespace Services
             _unitOfWork.Users.AddUser(user);
         }
 
-        public void GetGroupsForReport()
-        {
-
-        }
 
         /// <summary>
         /// Start game for the Group
@@ -85,9 +87,6 @@ namespace Services
 
             // TODO: Do Some Game Stuff
         }
-
-
-
 
     }
 }

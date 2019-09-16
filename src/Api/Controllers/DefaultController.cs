@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Reports;
+using System;
 
 namespace Api.Controllers
 {
@@ -19,13 +20,20 @@ namespace Api.Controllers
             [FromQuery] int remoteness
         )
         {
-            var user = userService.CreateUser(name, skill, remoteness);
+            try
+            {
+                var user = userService.CreateUser(name, skill, remoteness);
 
-            var group = groupService.GetGroupForUser(user);
-                       
-            groupService.ConnectUserToGroup(user, group);
+                var group = groupService.GetGroupForUser(user);
 
-            return Ok("User added to Group #" + group.Id);
+                groupService.ConnectUserToGroup(user, group);
+
+                return Ok("User added to Group #" + group.Id);
+            } catch (Exception ex)
+            {
+                // TODO: Log Error, Rollback Transactions etc.
+                return BadRequest(ex.ToString());
+            }
         }
 
         [HttpGet("report")]
@@ -35,15 +43,22 @@ namespace Api.Controllers
             [FromServices] ExportService exportService
         )
         {
-            var groups = groupService.GetGroups();
+            try
+            {
+                var groups = groupService.GetGroups();
 
-            var report = reportService.CreateGroupReport(groups);
+                var report = reportService.CreateGroupReport(groups);
 
-            var text = exportService.ToText(report);
+                var text = exportService.ToText(report);
 
-            return File(new System.Text.UTF8Encoding().GetBytes(text), "text/plain", "Report.txt");
+                return File(new System.Text.UTF8Encoding().GetBytes(text), "text/plain", "Report.txt");
+            } catch (Exception ex)
+            {
+                // TODO: Log Error, Rollback Transactions etc.
+                return BadRequest(ex.ToString());
+            }
+
         }
-
 
 
         // GET users
