@@ -49,7 +49,45 @@ namespace Services
 
             return group;
         }
-       
+
+        /// <summary>
+        /// Connect User To Group
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <param name="group">Group</param>
+        public void ConnectUserToGroup(User user, Group group)
+        {
+            user.GroupId = group.Id;
+
+            group.ConnectedUsers++;
+
+            if (group.MaxUsers <= group.ConnectedUsers)
+            {
+                Start(group);
+            }
+
+            _unitOfWork.Users.AddUser(user);
+        }
+
+        public void GetGroupsForReport()
+        {
+
+        }
+
+        /// <summary>
+        /// Start game for the Group
+        /// </summary>
+        /// <param name="group">Group</param>
+        private void Start(Group group)
+        {
+            group.IsStarted = true;
+            group.StartedAt = DateTime.Now;
+
+            // TODO: Do Some Game Stuff
+        }
+
+
+
 
     }
 }

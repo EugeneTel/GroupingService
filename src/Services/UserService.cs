@@ -50,24 +50,5 @@ namespace Services
                 ConnectedAt = DateTime.Now
             };
         }
-
-        /// <summary>
-        /// Connect User To Group
-        /// </summary>
-        /// <param name="user">User</param>
-        /// <param name="group">Group</param>
-        public void ConnectUserToGroup(User user, Group group)
-        {
-            user.GroupId = group.Id;
-
-            group.ConnectedUsers++;
-
-            if (group.MaxUsers <= group.ConnectedUsers)
-            {
-                group.IsActive = false;
-            }
-
-            _unitOfWork.Users.AddUser(user);
-        }
     }
 }

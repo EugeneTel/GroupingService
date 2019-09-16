@@ -13,7 +13,7 @@ namespace Models
         public string Name { get; set; }
 
         [Range(0, 1)]
-        public float SkillIndex { get; set; }
+        public double SkillIndex { get; set; }
 
         [Range(0, 100)]
         public int RemoteIndex { get; set; }
@@ -21,7 +21,6 @@ namespace Models
         public DateTime ConnectedAt { get; set; }
 
         [ForeignKey("Group")]
-        public int GroupId { get; set; }        
-        //public virtual Group Group { get; set; }
+        public int GroupId { get; set; }
     }
 }

@@ -10,10 +10,10 @@ namespace Models
         public int Id { get; set; }
 
         [Range(0, 1)]
-        public float BaseSkillIndex { get; set; }
+        public double BaseSkillIndex { get; set; }
 
         [Range(0, 100)]
-        public float BaseRemoteIndex { get; set; }
+        public double BaseRemoteIndex { get; set; }
 
         [Range(0, 100)]
         public int MaxUsers { get; set; }
@@ -23,7 +23,9 @@ namespace Models
 
         public DateTime CreatedAt { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsStarted { get; set; }
+
+        public DateTime? StartedAt { get; set; }
 
         public virtual ICollection<User> Users { get; set; }
     }

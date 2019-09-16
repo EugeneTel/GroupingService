@@ -26,14 +26,7 @@ namespace Repository.Repositories
         /// <returns>User model</returns>
         public User GetUserById(int id)
         {
-            return _dbSet.Where(u => u.Id == id).Select(u => new User
-            {
-                Id = u.Id,
-                Name = u.Name,
-                SkillIndex = u.SkillIndex,
-                RemoteIndex = u.RemoteIndex
-
-            }).FirstOrDefault();
+            return _dbSet.Where(u => u.Id == id).FirstOrDefault();
         }
 
         /// <summary>
@@ -42,14 +35,7 @@ namespace Repository.Repositories
         /// <returns>List of Users</returns>
         public IEnumerable<User> GetAll()
         {
-            return _dbSet.Select(u => new User
-            {
-                Id = u.Id,
-                Name = u.Name,
-                SkillIndex = u.SkillIndex,
-                RemoteIndex = u.RemoteIndex,
-                ConnectedAt = u.ConnectedAt
-            }).ToList();
+            return _dbSet.ToList();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Reports;
 
 namespace Api.Controllers
 {
@@ -22,19 +23,43 @@ namespace Api.Controllers
 
             var group = groupService.GetGroupForUser(user);
                        
-            userService.ConnectUserToGroup(user, group);
+            groupService.ConnectUserToGroup(user, group);
 
             return Ok("User added to Group #" + group.Id);
         }
 
+        [HttpGet("report")]
+        public ActionResult Report(
+            [FromServices] GroupService groupService,
+            [FromServices] ReportService reportService,
+            [FromServices] ExportService exportService
+        )
+        {
+            var groups = groupService.GetGroups();
+
+            var report = reportService.CreateGroupReport(groups);
+
+            var text = exportService.ToText(report);
+
+            return File(new System.Text.UTF8Encoding().GetBytes(text), "text/plain", "Report.txt");
+        }
 
 
-        // GET api/users
+
+        // GET users
         [HttpGet("users")]
-        public ActionResult<IEnumerable<string>> Get([FromServices] UserService userService)
+        public ActionResult<IEnumerable<string>> GetUsers([FromServices] UserService userService)
         {
             return Ok(userService.GetUsers());
         }
+
+        // GET groups
+        [HttpGet("groups")]
+        public ActionResult<IEnumerable<string>> GetGroups([FromServices] GroupService groupService)
+        {
+            return Ok(groupService.GetGroups());
+        }
+
 
     }
 }

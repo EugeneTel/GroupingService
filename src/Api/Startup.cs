@@ -9,6 +9,7 @@ using Repository.Context;
 using Repository.Repositories;
 using Repository.UnitOfWork;
 using Services;
+using Services.Reports;
 
 namespace Api
 {
@@ -36,6 +37,8 @@ namespace Api
             services.AddTransient<GroupRepository>();
             services.AddTransient<UserService>();
             services.AddTransient<GroupService>();
+            services.AddTransient<ReportService>();
+            services.AddTransient<ExportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

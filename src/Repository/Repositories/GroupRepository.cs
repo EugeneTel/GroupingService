@@ -41,7 +41,15 @@ namespace Repository.Repositories
         {
             return _dbSet.Select(g => new Group
             {
-                Id = g.Id
+                Id = g.Id,
+                BaseSkillIndex = g.BaseSkillIndex,
+                BaseRemoteIndex = g.BaseRemoteIndex,
+                MaxUsers = g.MaxUsers,
+                ConnectedUsers = g.ConnectedUsers,
+                CreatedAt = g.CreatedAt,
+                IsStarted = g.IsStarted,
+                StartedAt = g.StartedAt,
+                Users = g.Users
             }).ToList();
         }
 
@@ -52,14 +60,14 @@ namespace Repository.Repositories
         /// <param name="remoteIndex">Remoteness</param>
         /// <param name="range"></param>
         /// <returns>Group model</returns>
-        public Group GetGroupInRange(float skillIndex, int remoteIndex, float range = 0.2f)
+        public Group GetGroupInRange(double skillIndex, int remoteIndex, double range = 0.2f)
         {
             return _dbSet.Where(g => 
                 g.BaseSkillIndex >= skillIndex - range
                 && g.BaseSkillIndex <= skillIndex + range
                 && g.BaseRemoteIndex >= remoteIndex - range * 100
                 && g.BaseRemoteIndex <= remoteIndex + range * 100
-                && g.IsActive == true
+                && g.IsStarted == false
             ).OrderBy(g => g.BaseRemoteIndex).FirstOrDefault<Group>();
         }
 
@@ -69,7 +77,7 @@ namespace Repository.Repositories
         /// <param name="skillIndex">Base Skill index</param>
         /// <param name="remoteIndex">Base remoteness</param>
         /// <returns>Group model</returns>
-        public Group Create(float skillIndex, int remoteIndex)
+        public Group Create(double skillIndex, int remoteIndex)
         {
             var maxUsers = 5;
 
@@ -79,7 +87,7 @@ namespace Repository.Repositories
                 BaseSkillIndex = skillIndex,
                 MaxUsers = maxUsers,
                 CreatedAt = DateTime.Now,
-                IsActive = true
+                IsStarted = false
             };
 
             _dbSet.Add(group);
