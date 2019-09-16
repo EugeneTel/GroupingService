@@ -1,16 +1,10 @@
 version: '3'
 services:
-  mariadb:
-    build: 
-      context: ./docker/mariadb
-      dockerfile: Dockerfile
-    # networks:
-    #   - my_network
-    container_name: mariadb-container
+  db:
+    image: mysql:5.7
+    container_name: db-container
     environment:
       - MYSQL_ROOT_PASSWORD=root
-    ports:
-      - "3306:3306"
     expose:
       - "3306"
 
@@ -18,10 +12,8 @@ services:
     build:
       context: ./src
       dockerfile: Dockerfile
-    # networks:
-    #   - my_network
     links:
-      - "mariadb:database"
+      - "db:database"
     container_name: dotnet-core-container
     ports:
       - "5000:5000"
